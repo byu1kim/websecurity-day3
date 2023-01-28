@@ -1,0 +1,60 @@
+﻿@model IEnumerable<Day3.Models.IPN>
+
+@{
+    ViewData["Title"] = "Transactions";
+}
+  
+
+Transactions
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Created
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Email
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                MOP
+            </th>
+
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.create_time)
+            </td>
+
+            <td>
+                    @Html.DisplayFor(modelItem => item.payerFirstName) @Html.DisplayFor(modelItem => item.payerLastName)
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.payerEmail)
+            </td>
+          
+            <td>
+                    @Html.DisplayFor(modelItem => item.amount)@Html.DisplayFor(modelItem => item.currency)
+            </td>
+
+
+            <td>
+                @Html.DisplayFor(modelItem => item.paymentState)
+            </td>
+
+        </tr>
+}
+    </tbody>
+</table>
+
