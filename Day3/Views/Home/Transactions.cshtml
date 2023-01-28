@@ -3,13 +3,16 @@
 @{
     ViewData["Title"] = "Transactions";
 }
-  
+
 
 Transactions
 
 <table class="table">
     <thead>
         <tr>
+            <th>
+                Payment ID
+            </th>
             <th>
                 Created
             </th>
@@ -29,32 +32,35 @@ Transactions
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.paymentID)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.create_time)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.create_time)
+                </td>
 
-            <td>
+                <td>
                     @Html.DisplayFor(modelItem => item.payerFirstName) @Html.DisplayFor(modelItem => item.payerLastName)
-            </td>
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.payerEmail)
-            </td>
-          
-            <td>
-                    @Html.DisplayFor(modelItem => item.amount)@Html.DisplayFor(modelItem => item.currency)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.payerEmail)
+                </td>
 
+                <td>
+                    $@Html.DisplayFor(modelItem => item.amount)@Html.DisplayFor(modelItem => item.currency)
+                </td>
 
-            <td>
-                @Html.DisplayFor(modelItem => item.paymentState)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.paymentMethod)
+                </td>
 
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>
 

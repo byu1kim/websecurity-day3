@@ -1,5 +1,6 @@
 ﻿using Day3.Data;
 using Day3.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SQLitePCL;
@@ -28,6 +29,7 @@ namespace Day3.Controllers
 
         // Home page shows list of items.
         // Item price is set through the ViewBag.
+        [Authorize]
         public IActionResult Transactions()
         {
             DbSet<IPN> items = _context.IPNs;
@@ -54,6 +56,7 @@ namespace Day3.Controllers
 
         // Home page shows list of items.
         // Item price is set through the ViewBag.
+        [Authorize]
         public IActionResult Confirmation(string confirmationId)
         {
             IPN transaction =
