@@ -20,25 +20,20 @@ namespace Day3.Controllers
             _context = context;
         }
 
-        // Home page shows list of items.
-        // Item price is set through the ViewBag.
         public IActionResult Index()
         {
-            return View("Index", "3.55|CAD");
+            return View();
         }
 
-        // Home page shows list of items.
-        // Item price is set through the ViewBag.
+
         [Authorize]
         public IActionResult Transactions()
         {
             DbSet<IPN> items = _context.IPNs;
-
             return View(items);
         }
 
-        // This method receives and stores
-        // the Paypal transaction details.
+        [Authorize]
         [HttpPost]
         public JsonResult PaySuccess([FromBody] IPN ipn)
         {
@@ -54,8 +49,7 @@ namespace Day3.Controllers
             return Json(ipn);
         }
 
-        // Home page shows list of items.
-        // Item price is set through the ViewBag.
+
         [Authorize]
         public IActionResult Confirmation(string confirmationId)
         {
@@ -64,6 +58,21 @@ namespace Day3.Controllers
 
             return View("Confirmation", transaction);
         }
+
+        [Authorize]
+        public IActionResult SecureArea()
+        {   
+            string userName = User.Identity.Name;
+
+            var registeredUser = _context.MyRegisteredUsers
+                                         .Where(ru => ru.Email == userName)
+                                         .FirstOrDefault();
+
+            return View(registeredUser);
+        }
+
+ 
+
 
     }
 }

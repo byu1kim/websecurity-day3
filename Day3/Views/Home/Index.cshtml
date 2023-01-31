@@ -2,106 +2,13 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="row">
-    <div class="col-sm-4">
-        <img src="/images/deckofcards.png" alt="Pack of cards" style="max-width: 80%;">
-        <div class="d-flex justify-content-center "
-             style="color:crimson; font-size: 1.5em;">
-            $<span id="itemPrice">@Model.Split('|')[0]</span>
-            <span style="">&nbsp;</span>
-            <span id="currency">@Model.Split('|')[1]</span>
-        </div>
+<div class="container">
+    <h3>Welcome to Deck Master!</h3>
+    <div class="main" style="padding-top:40px;">
+        We specialize in providing high-quality decks of cards for all your gaming and card collecting needs. Our online store offers a wide variety of decks, from standard playing cards to collectible and limited-edition decks.
+        Our decks are made with durable materials and feature stunning designs, making them perfect for both casual and serious players. We also offer custom deck printing services to help you create your own personalized deck.
+        Thank you for choosing Deck Master for all your card needs. Shop now and discover the perfect deck for you!
     </div>
-
-    <div class="col-sm-8 col-md-4" style="padding-top:40px;">
-        Are you looking for a fun and affordable way
-        to pass the time? Look no further than our
-        high-quality deck of cards! At only $3.55,
-        this deck of cards is an excellent value.
-        You won't find a better price anywhere else.
-    </div>
-    <div class="col-sm-4 d-none d-md-block">
-    </div>
+    <button type="button" class="btn">Shop Now</button>
 </div>
 <hr>
-
-<div id="paypal-button"></div>
-<script src="https://www.paypalobjects.com/api/checkout.js"></script>
-<script>
-    paypal.Button.render({
-        env: 'sandbox',
-        style: {
-            size: 'small',
-            color: 'gold',
-            shape: 'pill',
-            label: 'checkout'
-        },
-        client: {
-            sandbox: 'AWGbGCMHT82eXkmtanlT82BRsHVpG6KOau-fi0MOqPLWgelsCLz5F2Y1v4xCqmgejpjqaPfEgwZNAbiq',
-        },
-
-        commit: true, // Show a 'Pay Now' button
-
-        payment: function (data, actions) {
-            return actions.payment.create({
-                payment: {
-                    transactions: [{
-                        custom: 'Custom data goes here!',
-                        amount: {
-                            total: document.getElementById("itemPrice").innerHTML,
-                            currency: document.getElementById("currency").innerHTML
-                        }
-                    }]
-                }
-            });
-        },
-        onAuthorize: function (data, actions) {
-            return actions.payment.execute().then(function (payment) {
-                console.log("This is what comes back from Paypal: ")
-                console.log(payment);
-                alert("This JSON is from Paypal: " + JSON.stringify(payment));
-                console.log("-------------------------------------")
-                var dataObject = {
-                    "cart": payment.cart,
-                    "intent": payment.intent,
-                    "paymentID": payment.id,
-                    "create_time": payment.create_time,
-                    "paymentState": payment.state,
-                    "payerEmail": payment.payer.payer_info.email,
-                    "payerID": payment.payer.payer_info.payer_id,
-                    "payerFirstName": payment.payer.payer_info.first_name,
-                    "payerLastName": payment.payer.payer_info.last_name,
-                    "payerMiddleName": payment.payer.payer_info.middle_name,
-                    "payerCountryCode": payment.payer.payer_info.country_code,
-                    "paymentMethod": payment.payer.payment_method,
-                    "payerStatus": payment.payer.status,
-                    "amount": payment.transactions[0].amount.total,
-                    "currency": payment.transactions[0].amount.currency,
-                    "custom": payment.transactions[0].custom
-                }
-
-                // The payment is complete!
-                $.ajax({
-                    type: "post",
-                    url: "/Home/PaySuccess",
-                    data: JSON.stringify(dataObject),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-
-                    //after success
-                    success: function (msg) {
-                        console.log("Data: " + JSON.stringify(data));
-                        window.location.href
-                            = "/Home/Confirmation?confirmationId=" + data.paymentID;
-                    },
-                    //after fail
-                    error: function (msg) {
-                        alert("fail: " + JSON.stringify(msg));
-                    }
-                });
-            })
-        },
-        onCancel: function (data, actions) {
-        },
-    }, '#paypal-button');
-</script>

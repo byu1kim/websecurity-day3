@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace Day3.Migrations
 {
     /// <inheritdoc />
-    public partial class init : Migration
+    public partial class addUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -74,6 +76,49 @@ namespace Day3.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_IPNs", x => x.paymentID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MyRegisteredUsers",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    FirstName = table.Column<string>(type: "TEXT", nullable: false),
+                    Email = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MyRegisteredUsers", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    ID = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    ProductName = table.Column<string>(type: "TEXT", nullable: false),
+                    Description = table.Column<string>(type: "TEXT", nullable: false),
+                    Price = table.Column<string>(type: "TEXT", nullable: false),
+                    Currency = table.Column<string>(type: "TEXT", nullable: false),
+                    Image = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleVM",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "TEXT", nullable: false),
+                    RoleName = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleVM", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -182,6 +227,16 @@ namespace Day3.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "Products",
+                columns: new[] { "ID", "Currency", "Description", "Image", "Price", "ProductName" },
+                values: new object[,]
+                {
+                    { 1, "CAD", "Are you looking for a fun and affordable way to pass the time? Look no further than our high-quality deck of cards! At only $3.79, this deck of cards is an excellent value.", "DeckOfCards.png", "3.79", "Red Cards" },
+                    { 2, "CAD", "Are you tired of being caught without an ace up your sleeve? Well, have no fear! Our special deck of cards comes with an extra ace, so you can always have the upper hand. And at just $4.95, it's a steal!", "FiveAces.jpg", "4.95", "Extra Ace" },
+                    { 3, "CAD", "Upgrade your card game with our premium black-styled deck of cards. Made with high-quality materials and featuring a sleek black design. At just $7.79, it's a small price to pay to make a big statement!", "BlackDeck.jpeg", "7.79", "Black Deck" }
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -240,6 +295,15 @@ namespace Day3.Migrations
 
             migrationBuilder.DropTable(
                 name: "IPNs");
+
+            migrationBuilder.DropTable(
+                name: "MyRegisteredUsers");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
+                name: "RoleVM");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
