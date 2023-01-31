@@ -10,6 +10,9 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
+using Day3.Data;
+using Day3.Data.Services;
+using Day3.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -31,14 +34,17 @@ namespace Day3.Areas.Identity.Pages.Account
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
         private readonly IConfiguration _configuration;
-
+        private readonly ApplicationDbContext _context;
+        private readonly IEmailService _emailService;
         public RegisterModel(
             UserManager<IdentityUser> userManager,
             IUserStore<IdentityUser> userStore,
             SignInManager<IdentityUser> signInManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender,
-            IConfiguration configuration)
+            IConfiguration configuration,
+            ApplicationDbContext context,
+            IEmailService emailService)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -47,6 +53,8 @@ namespace Day3.Areas.Identity.Pages.Account
             _logger = logger;
             _emailSender = emailSender;
             _configuration = configuration;
+            _context = context;
+            _emailService = emailService;
         }
 
         /// <summary>
@@ -82,6 +90,15 @@ namespace Day3.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Required]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+            
+            [Required]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -138,6 +155,15 @@ namespace Day3.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    MyRegisteredUser registerUser = new MyRegisteredUser()
+                    {
+                        Email = Input.Email,
+                        FirstName = Input.FirstName
+                    };
+                    _context.MyRegisteredUsers.Add(registerUser);
+                    _context.SaveChanges();
+
+
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
@@ -149,12 +175,28 @@ namespace Day3.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    //await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                    //    $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    var response = await _emailService.SendSingleEmail(new Models.ComposeEmailModel
+                    {
+                        FirstName = Input.FirstName,
+                        LastName = string.Empty,
+                        Subject = "Confirm your email",
+                        Email = Input.Email,
+                        Body = $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
+                    });
+
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
-                        return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
+                        return RedirectToPage("RegisterConfirmation", new
+                        {
+                            email = Input.Email,
+                            returnUrl = returnUrl,
+                            DisplayConfirmAccountLink = true
+                        });
+
+                        //return RedirectToPage("RegisterConfirmation", new { email = Input.Email, returnUrl = returnUrl });
                     }
                     else
                     {

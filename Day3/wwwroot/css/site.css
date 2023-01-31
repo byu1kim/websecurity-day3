@@ -20,3 +20,20 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+nav, footer {
+    background-color: green;
+}
+
+footer {
+    text-align: center;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+}
+
+.btn {
+    background-color: green;
+}

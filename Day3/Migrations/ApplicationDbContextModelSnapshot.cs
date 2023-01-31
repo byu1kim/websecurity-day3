@@ -87,6 +87,99 @@ namespace Day3.Migrations
                     b.ToTable("IPNs");
                 });
 
+            modelBuilder.Entity("Day3.Models.MyRegisteredUser", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("MyRegisteredUsers");
+                });
+
+            modelBuilder.Entity("Day3.Models.Product", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Image")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Price")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ProductName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Products");
+
+                    b.HasData(
+                        new
+                        {
+                            ID = 1,
+                            Currency = "CAD",
+                            Description = "Are you looking for a fun and affordable way to pass the time? Look no further than our high-quality deck of cards! At only $3.79, this deck of cards is an excellent value.",
+                            Image = "DeckOfCards.png",
+                            Price = "3.79",
+                            ProductName = "Red Cards"
+                        },
+                        new
+                        {
+                            ID = 2,
+                            Currency = "CAD",
+                            Description = "Are you tired of being caught without an ace up your sleeve? Well, have no fear! Our special deck of cards comes with an extra ace, so you can always have the upper hand. And at just $4.95, it's a steal!",
+                            Image = "FiveAces.jpg",
+                            Price = "4.95",
+                            ProductName = "Extra Ace"
+                        },
+                        new
+                        {
+                            ID = 3,
+                            Currency = "CAD",
+                            Description = "Upgrade your card game with our premium black-styled deck of cards. Made with high-quality materials and featuring a sleek black design. At just $7.79, it's a small price to pay to make a big statement!",
+                            Image = "BlackDeck.jpeg",
+                            Price = "7.79",
+                            ProductName = "Black Deck"
+                        });
+                });
+
+            modelBuilder.Entity("Day3.ViewModels.RoleVM", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoleVM");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
