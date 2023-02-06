@@ -8,6 +8,7 @@ using System.Data;
 
 namespace Day3.Controllers
 {
+
     [Authorize(Roles = "Admin, Manager")]
     public class UserRoleController : Controller
     {

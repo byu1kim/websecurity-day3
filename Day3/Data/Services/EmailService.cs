@@ -19,7 +19,7 @@ namespace Day3.Data.Services
         {
             var apiKey = _configuration.GetSection("SendGrid")["ApiKey"];
             var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("caxbelle@gmail.com", "Byul Kim");
+            var from = new EmailAddress("sum4star@gmail.com", "Byul Kim");
             var subject = payload.Subject;
             var to = new EmailAddress(payload.Email
                                      , $"{payload.FirstName} {payload.LastName}");

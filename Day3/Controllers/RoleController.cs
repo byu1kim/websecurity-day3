@@ -31,7 +31,10 @@ namespace Day3.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Create(RoleVM rVM) {
+
+            var token = HttpContext.Request.Form["__RequestVerificationToken"];
             if (ModelState.IsValid)
             {
                 RoleRepo rRepo = new RoleRepo(_context);

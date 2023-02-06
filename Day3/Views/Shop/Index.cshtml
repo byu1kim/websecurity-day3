@@ -3,74 +3,76 @@
 @{
     ViewData["Title"] = "Index";
 }
+<section>
+    <h2>Shop</h2>
+    <table class="table">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Currency)
-            </th>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img src="./images/@item.Image" style="width:150px;" alt="@item.Image" />
+                        <div>$<span id="@item.ID-itemPrice">@Html.DisplayFor(modelItem => item.Price)</span><span>@Html.DisplayFor(modelItem => item.Currency)</span></div>
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
 
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <img src="./images/@item.Image" style="width:150px;" alt="@item.Image" />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td id="@item.ID-itemPrice">
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Currency)
-                </td>
-
-                <td>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <button id="@item.ID-add-sm" onclick="updateShoppingCart(event)">Add to Cart</button>
-                        <button id="@item.ID-remove-sm" onClick="updateShoppingCart(event)">Remove from cart</button>
-                        <span>Qty : </span> <span id="@item.ID-quantity-lg" class="quantity-lg">0</span>
-                        <span>Amount : $</span>
-
-                        <span id="@item.ID-amount-lg" class="amount-lg">0</span>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    <td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button type="button" id="@item.ID-add-sm" onclick="updateShoppingCart(event)" class="btn add-cart">Add to Cart</button>
+                            <button type="button" id="@item.ID-remove-sm" onclick="updateShoppingCart(event)" class="btn remove-cart">Remove from cart</button>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Qty</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><span id="@item.ID-quantity-lg" class="quantity-lg">0</span></td>
+                                        <td>$<span id="@item.ID-amount-lg" class="amount-lg">0</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
 
-@if (User.Identity.IsAuthenticated)
-{
-    <div><span>Total Items: </span><span id="totalItems">0</span></div>
-    <div><span>Total Amount: </span><span id="totalAmount">0</span></div>
-    <div id="currency">CAD</div>
-    <div id="paypal-button"></div>
-}
-else
-{
-    <div><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login To Add</a></div>
-}
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div id="paypal-button"></div>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Total Items</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span id="totalItems">0</span></td>
+                    <td>$<span id="totalAmount">0</span><span id="currency">CAD</span></td>
+                </tr>
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <button type="button" class="btn"><a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login to Add</a></button>
+    }
 
 
 
+</section>
 
 
 @* Handling Shopping Cart *@
@@ -216,4 +218,3 @@ else
         },
     }, '#paypal-button');
 </script>
-
